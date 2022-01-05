@@ -11,19 +11,6 @@
 #define SIZE_TOP 8
 #define SIZE_TAB 4
 #define SIZE_IGUAL 40 
-
-/*                     IDAIA PARA MELHORAR O CÓDIGO (se der tempo) - 26/08/21
-      Utilizar o variavel id da (struct cadastro) para linkar os maquinários fornecido pelo usuário
-      OBS: o id já esta implementado, amarzenando a posição do nome no vetor da (struct cadastro cad)
-      Como fazer...
-      Quando alguem for add um novo maquinário perguntar o nome.
-      buscar pelo nome se existe, caso sim, pegar o id relacionado a esse nome
-      add esse id ao maquinário que esta sendo adicionado a lista.
-      
-      Quando buscar por maquinário, trazer tmb o nome da pessoa que add o maquinário a lista    
-*/
-//Implementar as Struct> endereco, telefone com a nova forma de escrever em C
-//Com a materia vista no dia 08/09/21 em Algoritmo e Logica de Programação II
 //------------------------------------------------------------------------------
 struct endereco {
        char logra[20], num[7], complemento[20], bairro[20], cidade[20], CEP[9];    
@@ -59,8 +46,6 @@ int contMaq = 0;
 /*Feito*/void pesquisa ();
 /*Feito*/void selection ();
 /*Feito*/int procurarMaq();
-/////////int procurarMaq(char *pv[20]);
-
 /*Feito*/void quadrado (int x, int y, int altura, int largura);
 /*Feito*/void divisaoTotal (int x, int y, int altura, int largura);
 /*Feito*/void corFundo (int x, int y, int altura, int largura, int cor);
@@ -69,29 +54,20 @@ int contMaq = 0;
 /*Feito*/void margemPadrao (int refX, int cor, char frase[30]);
 /*Feito*/void gridCadastro ();
 /*Feito*/void gridMaquina ();
-
 /*Feito*/void print ();  //FUNÇÃO SÓ PARA VER SE A LOGICA QUE EU CRIEI ESTA CORRETA
-
-//Fazer para a proxima entrega
-void listarMaquinas ();//Mostrar lista dos maquinarios com: nome, valor, potencia...
-void deletarMaquina ();//Deletar algum maquinario do vetor cadMaq;
-//Vai ser complicado, pq tem que ajustar o vetor para não ficar com valores NULL entre
-//valores preenchidos.
-
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 //Programa Principal...
 //------------------------------------------------------------------------------
 int main (){
-    //setlocale(LC_ALL,"portuguese");
+    //Não posso usar essa função por conta da biblioteca coin
+    //setlocale(LC_ALL,"portuguese"); 
     system("mode con:cols=80 lines=25"); //Tamenho da tela padão 
-    //(tem que ver se é esse o comando esta certo)
     int op;
     int k;
  
     while (op != 0){
         system ("cls");
-        //topo(); //Logo RENTagro
         quadrado (1,1,24,79); //Margens laterais
         quadrado (20,4,2,39);
         gotoxy (21,5);
@@ -135,15 +111,7 @@ return 0;
 //---------------Procedimento para a estilização das telas----------------------
 //------------------------------------------------------------------------------
 void quadrado (int x, int y, int altura, int largura){
-    //Limite da altura 24
-    //Limite da largura 79    
-    /*
-    //x e y fala onde é a posição do canto superior esquerdo do quadrado    
-    altura=5;       //Linha
-    largura =20;   //Coluna
-    */
     gotoxy (x,y); //Posição de referencia do quadrado (canto superior esquedo)
-    
     //for para criar as duas COLUNAS
     for (int alfa=1; alfa<=altura; alfa++){
         //Coluna ESQUERDA
@@ -302,9 +270,6 @@ void gridMaquina (){
     int refX = 18, refY = 6;
         
     margemPadrao (6, 4, "Cadastro de Maquinario");
-    
-    //Quadrado para o titulo????
-    //quadrado (refX+3,3,2,40);
     //Quadrado Centro
     quadrado (refX,refY,10,45);
     divisaoTotal (refX,refY+2,5,45);
@@ -341,7 +306,7 @@ void gridMaquina (){
     gotoxy (refX+18,refY+9);
     printf ("VALOR:");  
     
-    //Texto acima do botão /*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*
+    //Texto acima do botão
     gotoxy (refX+13, refY+11);
     fflush (stdin);
     gotoxy (refX+33, refY+11);
@@ -621,7 +586,7 @@ void cadMaquina (){
      gets (cadMaq[j].nome);
 
      //-----------------------------------------------------------
-     //Guardando os nomes com TODOS os caracteres Maisculo
+     //Guardando os nomes com TODOS os caracteres Maiusculo
      strcpy (converter,cadMaq[j].nome);
      for (int k=0; k<strlen(converter); k++){
          converter[k] = toupper(converter[k]);
