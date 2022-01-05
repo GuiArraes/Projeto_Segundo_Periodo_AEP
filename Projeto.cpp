@@ -21,6 +21,9 @@
       
       Quando buscar por maquinário, trazer tmb o nome da pessoa que add o maquinário a lista    
 */
+//Implementar as Struct> endereco, telefone com a nova forma de escrever em C
+//Com a materia vista no dia 08/09/21 em Algoritmo e Logica de Programação II
+//------------------------------------------------------------------------------
 struct endereco {
        char logra[20], num[7], complemento[20], bairro[20], cidade[20];
        int CEP;    
@@ -30,12 +33,11 @@ struct telefone {
 };
 struct cadastro{
        int id;
-       char nome[20], email[20], CPF[11], senha[10], senhaR[10];
+       char nome[20], email[20], CPF[12], senha[10], senhaR[10];
        char tmp;
        struct endereco Endereco;
        struct telefone Telefone;       
 };
-//------------------------------------------------------------------------------
 struct cadastroMaq {
        int id;
        char nome[20], categoria[20], marca[20], modelo[20], ano[7], potencia[10];
@@ -48,6 +50,8 @@ struct cadastroMaq cadMaq[SIZE_MAQ];
 int contMaq = 0;
 //------------------------------------------------------------------------------
 //Inicializando as Funções
+/*Feito*/void diagramacao (int n, int z);
+/*Feito*/void topo ();
 /*Feito*/void cadCliente();
 /*Feito*/int validarEmail (char c[20], int *p);
 /*Feito*/bool validarCPF (char cpf[15]);   
@@ -56,17 +60,13 @@ int contMaq = 0;
 /*Feito*/void pesquisa ();
 /*Feito*/void selection ();
 /*Feito*/int procurarMaq();
-/*Feito*/void diagramacao (int n, int z);
-/*Feito*/void topo ();
-void print ();  //FUNÇÃO SÓ PARA VER SE A LOGICA QUE EU CRIEI ESTA CORRETA
+/*Feito*/void print ();  //FUNÇÃO SÓ PARA VER SE A LOGICA QUE EU CRIEI ESTA CORRETA
+
 //Fazer para a proxima entrega
 void listarMaquinas ();//Mostrar lista dos maquinarios com: nome, valor, potencia...
 void deletarMaquina ();//Deletar algum maquinario do vetor cadMaq;
 //Vai ser complicado, pq tem que ajustar o vetor para não ficar com valores NULL entre
 //valores preenchidos.
-
-
-
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
@@ -109,7 +109,6 @@ int main (){
                case 1: cadCliente(); break;
                case 2: cadMaquina(); break;
                case 3: pesquisa (); break;
-               case 4: selection (); break;
         }
     }
     system ("cls");
@@ -173,7 +172,7 @@ void topo (){
 //------------------------------------------------------------------------------
 void cadCliente (){
      static int i;
-     
+   
      topo();
      diagramacao (1,0); 
      if (i > SIZE_CAD){
@@ -197,7 +196,6 @@ void cadCliente (){
          int k = 0;
          bool flag2 = true;
          while (flag != 1 || k == 0 || flag2 == true){
-
              flag = 0;
              flag2 = true;
              fflush (stdin);
@@ -205,14 +203,16 @@ void cadCliente (){
              printf ("E-mail        : ");
              gets (cad[i].email);
              
-             flag = validarEmail (cad[i].email, &k);     //Verifica se tem um @ e pelo menos um ponto
-             if (flag != 1 && k == 0){
+             //Verifica se tem um @ e pelo menos um ponto
+             flag = validarEmail (cad[i].email, &k);
+             if (flag < 1 || k == 0){
                 diagramacao (2,1);
                 printf ("     E-mail INVALIDO!!!\n");
                 diagramacao (2,0);
                 printf ("Tem que ter um @ e pelo menos um ponto.\n");
              }
-             flag2 = comparacao (cad[i].email, 1, i); // 1°email p/comparar, 2°Tipo comparação, 3°Tamanho vetor atual
+             flag2 = comparacao (cad[i].email, 1, i); 
+             //1°email p/comparar, 2°Tipo comparação, 3°Tamanho vetor atual
              if (flag2 == true){
                   diagramacao (2,0);
                   printf ("E-mail já cadastrado.\n");
@@ -221,7 +221,6 @@ void cadCliente (){
              diagramacao (3,0);
          }
          
-         //bool flag2;
          bool valida = false;
          flag2 = true;
          while (valida == false || flag2 == true){   
@@ -231,8 +230,9 @@ void cadCliente (){
                printf ("CPF           : ");
                gets (cad[i].CPF);
                
-               valida = validarCPF (cad[i].CPF);  //FUNÇÃO VALIDAR CPF passagem por parametro.
-               if (valida == false || cad[i].CPF == NULL){
+               //FUNÇÃO VALIDAR CPF passagem por parametro.
+               valida = validarCPF (cad[i].CPF);
+               if (valida == false ){
                   diagramacao (2,0);
                   printf ("CPF informado INVALIDO.\n");
                }
@@ -245,27 +245,43 @@ void cadCliente (){
          diagramacao (2,0);
          diagramacao (3,0);
          do{
-             fflush(stdin);
-             diagramacao (2,0);
-             printf ("Senha         : ");
-             gets (cad[i].senha);
-             diagramacao (2,0);
-             diagramacao (3,0);
-             
-             fflush (stdin);
-             diagramacao (2,0);
-             printf ("Repetir Senha : ");
-             gets (cad[i].senhaR);
-             diagramacao (2,0);
-             diagramacao (4,0);     
-         }while (strcmp (cad[i].senha,cad[i].senhaR) != 0); //As duas senhas têm que serem iguais.
+            do {
+                 fflush(stdin);
+                 diagramacao (2,0);
+                 printf ("Senha         : ");
+                 gets (cad[i].senha);
+                 diagramacao (2,0);
+                 diagramacao (3,0);
+                 if (strlen(cad[i].senha) < 6){
+                     diagramacao (2,0);
+                     printf ("Senha tem que ter no minimo 6 caracter.\n"); 
+                     diagramacao (2,0);
+                     diagramacao (3,0); 
+                 }
+            }while (strlen(cad[i].senha) < 6);
+            
+            fflush (stdin);
+            diagramacao (2,0);
+            printf ("Repetir Senha : ");
+            gets (cad[i].senhaR);
+            diagramacao (2,0);
+            diagramacao (4,0);
+            if (strcmp (cad[i].senha,cad[i].senhaR) != 0){
+               diagramacao (2,0);
+               printf ("Senhas diretentes. Digite novamente.\n");
+               diagramacao (2,0);
+               diagramacao (3,0);
+            }
+                  
+         }while (strcmp (cad[i].senha,cad[i].senhaR) != 0); 
+         //As duas senhas têm que serem iguais.
      i++;
      }
      diagramacao (2,0);
      system ("pause");
 }
 //------------------------------------------------------------------------------
-int validarEmail (char c[20], int *p){  //ERRO DO CARARRO QUE NÃO SEI ARRUMAR
+int validarEmail (char c[20], int *p){
      int vali = 0;     
      int cont = 0;
      int tm;         
@@ -285,51 +301,18 @@ int validarEmail (char c[20], int *p){  //ERRO DO CARARRO QUE NÃO SEI ARRUMAR
     return vali;    
 }
 //------------------------------------------------------------------------------
-bool comparacao (char compara[20], int tipo, int tmVetor){
-     //tipo = 1: analiza os e-mail
-     //tipo = 2: analiza os cpf 
-     bool flag;
-     char comparaCPF[12];    
-        
-     switch (tipo){
-            case 1:               
-                 for (int x=0; x<tmVetor; x++){
-                     if (strcmp (compara,cad[x].email) == 0){
-                        return true;
-                     }else{
-                        flag = false;   
-                     }  
-                 }
-                 return flag;
-                 break;
-            case 2:
-                 
-                 strncpy (comparaCPF,compara,11);
-                 comparaCPF[11] = '\0';    
-                 for (int x=0; x<tmVetor; x++){
-                     if (strcmp (comparaCPF,cad[x].CPF) == 0){
-                        return true;
-                     }else{
-                        flag = false;   
-                     }  
-                 }
-                 return flag;
-                 break;
-     }              
-}
-//------------------------------------------------------------------------------
 bool validarCPF (char cpf[11]){
      //TRABALHAR COM A TABELA ASCII
      int soma = 0;
      int verificar;
      char vetorCPF[11];
      //"Convertendo caracter em número"
-     for (int y=0; y<=10; y++){ //Só foi ateé o índice 11 pq o '\0' não me entereça.
+     for (int y=0; y<=10; y++){ //Só foi ateé o índice 11 pq o '\0' não me intereça.
          vetorCPF[y] = (cpf[y] - 48); //48 é o valor ASCII para o caracter '0'
      }
      //Desta forma tenho os "números inteiro" do cpf digitado
      //Isto é, tem-se os numeros do cpf digitado ente 0-9 em cada posição do vetorCPF
-     
+       
      //Verificando o Digito 10
      for (int x=0; x<=8; x++){
          soma = soma + (vetorCPF[x] * (10-x)); //A "Conversão" é para usar aqui.
@@ -364,6 +347,38 @@ bool validarCPF (char cpf[11]){
      }else{
         return false; //CPF invalido
      }         
+}
+//------------------------------------------------------------------------------
+bool comparacao (char compara[12], int tipo, int tmVetor){
+     //tipo = 1: analiza os e-mail
+     //tipo = 2: analiza os cpf 
+     bool flag;
+     char comparaCPF[12];    
+        
+     switch (tipo){
+            case 1:               
+                 for (int x=0; x<tmVetor; x++){
+                     if (strcmp (compara,cad[x].email) == 0){
+                        return true;
+                     }else{
+                        flag = false;   
+                     }  
+                 }
+                 return flag;
+                 break;
+            case 2:
+                 strncpy (comparaCPF,compara,11);
+                 comparaCPF[11] = '\0';    
+                 for (int x=0; x<tmVetor; x++){
+                     if (strcmp (comparaCPF,cad[x].CPF) == 0){
+                        return true;
+                     }else{
+                        flag = false;   
+                     }  
+                 }
+                 return flag;
+                 break;
+     }              
 }
 //------------------------------------------------------------------------------
 void cadMaquina (){  
@@ -486,16 +501,7 @@ void pesquisa (){
 //------------------------------------------------------------------------------
 void selection (){
      struct cadastroMaq comp; 
-     /*
-    strcpy (cadMaq[2].nome, "CARRO");
-    strcpy (cadMaq[1].nome, "COLHEITADEIRA");
-    strcpy (cadMaq[0].nome, "PLANTADEIRA");
-    strcpy (cadMaq[3].nome, "TRATOR");
-    contMaq = 3;
-    */
-    //print ();
-    //system ("pause");
-         
+     
      for (int i=0; i<=contMaq-1; i++){
          for (int j=i+1; j<=contMaq; j++){
              if (strcmp(cadMaq[j].nome, cadMaq[i].nome) < 0){
@@ -505,23 +511,12 @@ void selection (){
              }           
          }         
      }  
-     //print ();
 }
 //------------------------------------------------------------------------------
-int procurarMaq (){      //BUSCA BINARIA
+int procurarMaq (){          //BUSCA BINARIA
     int ini, fim, meio, p = 0;                
     char pesquisa[20];
-    
-    /* 
-    strcpy (cadMaq[1].nome, "CARRO");
-    strcpy (cadMaq[2].nome, "COLHEITADEIRA");
-    strcpy (cadMaq[3].nome, "PLANTADEIRA");
-    strcpy (cadMaq[4].nome, "TRATOR");
-    /*for (int i=0; i<=3; i++){
-        printf ("%s \n",cadMaq[i].nome);
-    }
-    system ("pause");
-    */
+
     fflush (stdin);
     diagramacao (1,0);
     diagramacao (2,0);
@@ -531,33 +526,29 @@ int procurarMaq (){      //BUSCA BINARIA
     gets (pesquisa);
     diagramacao (2,0);
     diagramacao (4,0);
+    
     // TODOS os caracteres da pesquisa maiusculo.
     for (int k=0; k<strlen(pesquisa); k++){
         pesquisa[k] = toupper(pesquisa[k]);
     }
-    
-    print ();
-    system ("pause");
-
     ini = 1;
     fim = contMaq;
-    //p = 0;
     while (ini <= fim){
           meio = (ini+fim)/2;
-          printf ("valor meio: %d\nmeio: %s\npesquisa: %s\n",meio, cadMaq[meio].nome, pesquisa);
+          //printf ("valor meio: %d\nmeio: %s\npesquisa: %s\n",meio, cadMaq[meio].nome, pesquisa);
           if (strcmp(cadMaq[meio].nome,pesquisa) == 0){
              p = meio;
              return p;//retorna a posição que a maquina buscada esta no vetor cadMaq
           }else{
               if (strcmp(pesquisa, cadMaq[meio].nome) < 0){ 
                  fim = meio - 1;
-                 printf ("fim - meio - 1\n\n"); 
-                 system ("pause");            
+                 //printf ("fim - meio - 1\n\n"); 
+                 //system ("pause");            
               }
               else {
                    ini = meio + 1;
-                   printf ("ini = meio + 1\n\n");
-                   system ("pause");
+                   //printf ("ini = meio + 1\n\n");
+                   //system ("pause");
               }
           }                  
     }
