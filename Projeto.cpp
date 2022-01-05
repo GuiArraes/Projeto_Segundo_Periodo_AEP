@@ -3,7 +3,9 @@
 #include <locale.h>
 #include <string.h> // função strlen(char) - conta caracteres
                     //função strcpy(char) - copia caracter
-struct end {
+
+
+struct endereco {
        char logra[20];
        int CEP;
        char num[7];
@@ -12,67 +14,163 @@ struct end {
        char cidade[20];     
 };
 
-struct tel {
+struct telefone {
        int celular[11];       
 };
 
 struct cadastro{
        char nome[20];
        char email[20];
-       int CPF[11];
-       int senha;
-       int senhaR;
-       struct end Endereco;
-       struct tel telefone;       
+       int CPF[15];
+       //int senha;
+       //int senhaR;
+       char senha[10];
+       char senhaR[10];
+       struct endereco Endereco;
+       struct telefone Telefone;       
 };
 //------------------------------------------------------------------------------
-int validaCPF (int cCPF){
-    int soma;
- 
-//Primeiro número verificador
-    soma = 0;
-    for (int x= 1; x<=9; x++){
-        //soma = soma + (vCPF[x]*(11-x));
-    }
-}
-//------------------------------------------------------------------------------
-void cadastro (struct cadastro *p){
-     int x;
-     FILE *cadastroCliente;
-     cadastroCliente = fopen ("CadastroCliente.txt","w");
-
-//As duas senhas tem que serem iguais.
-   while ((p -> senha) != (p -> senhaR)){ //Esta apontando para dois endereço de memoria distinto.
-         
-         printf ("Senha: ");
-         scanf ("%d",&x);
-         p -> senha = x;
-//printf ("\n\n%d \n\n",p -> senha);    //TESTESSSS
-         printf ("Repetir Senha: ");
-         scanf ("%d",&x);
-         p -> senhaR = x;
-//printf ("\n\n%d \n\n",p -> senhaR);   //TESTESSSS
-   }
-   fwrite (&x,sizeof(struct cadastro),1,cadastroCliente);
-   fclose (cadastroCliente);
-
-}
+void cadastro();
+void busca ();
+void lendoCadastro ();
 //------------------------------------------------------------------------------
 int main (){
     setlocale(LC_ALL,"portuguese");
     
-
-    struct cadastro cad;
-    cadastro (&cad); //Passagem por referencia
-
-
-
-
+    //cadastro ();
+    //busca ();
+    lendoCadastro ();
     
+    
+    //system ("cls");
+    printf ("---------------------");
+    for (int i=0; i<=30; i++){
+        printf ("%s", textoNome[i]);
+    }
+    
+
 system ("pause");
 return 0;
 }
+//------------------------------------------------------------------------------
+void cadastro (){
+     //int x;
+     FILE *cadastroCliente;
+     cadastroCliente = fopen ("CadastroCliente.txt","a");
+     struct cadastro cad;
+     
+     if (cadastroCliente == NULL){
+        printf ("Erro: O Arquivo 'Cadastro Cliente' não foi aberto!\n");
+     }
 
+     
+     printf ("Nome: ");
+     gets (cad.nome);
+
+
+  // do{
+         fflush(stdin);
+         printf ("Senha: ");
+         //scanf ("%d",&cad.senha);
+         gets (cad.senha);
+
+         printf ("Repetir Senha: ");
+         //scanf ("%d",&cad.senhaR);
+         gets (cad.senhaR);     
+   //}while ((cad.senha) != (cad.senhaR)); //As duas senhas tem que serem iguais.
+   
+   int k;
+   k = fputs (cad.nome, cadastroCliente);
+   k = fputs (cad.senha, cadastroCliente); //Armazena STRING no Formato: txt.
+   k = fputs ("\n", cadastroCliente);
+   if (k == EOF){
+      printf ("Erro ao gravar os Dados no arquivo 'CadastroCliente'!");
+   }
+
+   //fwrite (&cad,sizeof(struct cadastro),1,cadastroCliente);   //Armazena um Bloco de Dados Formato: Binario
+   fclose (cadastroCliente);
+
+}
+//------------------------------------------------------------------------------
+void busca (){
+     FILE *cadastroCliente;
+     cadastroCliente = fopen ("CadastroCliente.txt","r");
+     
+     if (cadastroCliente == NULL){
+        printf ("Erro: O Arquivo 'Cadastro Cliente' não foi aberto!\n");
+     }
+     
+     char leitura[30];
+     
+     //fgets(leitura,)
+     
+     fclose (cadastroCliente);
+     /*
+     struct cadastro cad; 
+     printf ("-----------\n");
+     while (fread (&cad,sizeof(struct cadastro),1,cadastroCliente)==1){
+           printf ("%d \n",cad.senha);
+     }
+     printf ("-----------\n"); 
+     */    
+}
+//------------------------------------------------------------------------------
+
+/* Essa ideia não da certo!!!
+void lendoCadastro (){
+     FILE *cadastroCliente;
+   
+    char textoNome[30]; //Amarzenar os nomes que são do arquivo CadastroCliente.
+    char texto [30];
+     
+     cadastroCliente = fopen ("CadastroCliente.txt","r");
+     for (int i=0; i<=30; i++){
+         fgets(texto,30,cadastroCliente);
+         textoNome [i] = texto;
+     }
+     fclose (cadastroCliente);
+}
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         //p -> senhaR = x;
+//printf ("\n\n%d \n\n",p -> senhaR);   //TESTESSSS
 
 
 
